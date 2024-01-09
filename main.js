@@ -62,7 +62,7 @@ function calcularCostoTotal(categoria, cantidadPax, fechaCheckIn, fechaCheckOut)
         cantidadDeNoches: cantidadDeNoches,
         costoPorNoche: costoPorNoche,
         costoTotal: costoTotal,
-        nombreHabitacion: categoria // Aquí se usa la categoría como nombre de habitación
+        nombreHabitacion: categoria
     };
 }
 
