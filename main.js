@@ -1,8 +1,12 @@
 const COSTO_POR_NOCHE = {
-    "suit estandar con hidromasaje": 75000,
-    "suit superior con hidromasaje": 85000,
-    "duplex con hidromasaje": 140000,
-    "suit estandar": 65000,
+    "doble  plus con vista": { precio: 75000, pasajeros: 2 },
+    "doble  estandar con vista": { precio: 60000, pasajeros: 2 },
+    "doble superior con vista": { precio: 81000, pasajeros: 2 },
+    "duplex - dos ambientes plus con vista": { precio: 117000, pasajeros: 4 },
+    "duplex - dos ambientes con vista": { precio: 111000, pasajeros: 4 },
+    "doble estandar sin vista": { precio: 54000, pasajeros: 2 },
+    "doble indoor": { precio: 45000, pasajeros: 2 },
+    "triple plus con vista": { precio: 105000, pasajeros: 3 },
 };
 
 function obtenerFecha(promptText) {
@@ -11,17 +15,14 @@ function obtenerFecha(promptText) {
         let input = prompt(promptText);
         let [dia, mes, anio] = input.split("/");
 
-        
         fecha = new Date(`${mes}/${dia}/${anio}`);
-        
-        
+
         if (!isNaN(fecha.getTime()) && fecha.getFullYear() == anio && fecha.getMonth() + 1 == mes && fecha.getDate() == dia) {
             break;
         } else {
             alert("Fecha inválida. Por favor, ingrese una fecha válida (DD/MM/YYYY).");
         }
     }
-
 
     return formatearFecha(fecha);
 }
@@ -42,8 +43,8 @@ function calcularDiferenciaEnDias(fechaInicio, fechaFin) {
     return Math.ceil(diferenciaEnMilisegundos / unDiaEnMilisegundos);
 }
 
-function calcularCostoTotal(categoria, fechaCheckIn, fechaCheckOut) {
-    let costoPorNoche = COSTO_POR_NOCHE[categoria];
+function calcularCostoTotal(categoria, cantidadPax, fechaCheckIn, fechaCheckOut) {
+    let costoPorNoche = COSTO_POR_NOCHE[categoria].precio;
     if (!costoPorNoche) {
         alert("CATEGORÍA INCORRECTA!!!");
         return;
@@ -55,11 +56,13 @@ function calcularCostoTotal(categoria, fechaCheckIn, fechaCheckOut) {
 
     return {
         categoria: categoria,
+        cantidadPax: cantidadPax,
         fechaCheckIn: formatearFecha(fechaCheckIn),
         fechaCheckOut: formatearFecha(fechaCheckOut),
         cantidadDeNoches: cantidadDeNoches,
         costoPorNoche: costoPorNoche,
-        costoTotal: costoTotal
+        costoTotal: costoTotal,
+        nombreHabitacion: categoria // Aquí se usa la categoría como nombre de habitación
     };
 }
 
@@ -67,18 +70,25 @@ let presupuestoTotal = 0;
 let detallesReserva = [];
 
 while (true) {
-    let opciones = "◉ Suit Estandar con Hidromasaje\n◉ Suit Superior con Hidromasaje\n◉ Duplex con Hidromasaje\n◉ Suit Estandar";
+    let cantidadPax = parseInt(prompt("Ingrese la cantidad de pasajeros:"));
+    let opcionesDisponibles = Object.keys(COSTO_POR_NOCHE).filter(categoria => COSTO_POR_NOCHE[categoria].pasajeros >= cantidadPax);
 
-    let seleccion = prompt("Ingrese la Categoría de habitación que desea reservar:\n" + opciones).toLowerCase();
+    if (opcionesDisponibles.length === 0) {
+        alert("No hay opciones disponibles para la cantidad de pasajeros ingresada.");
+        continue;
+    }
 
-    if (COSTO_POR_NOCHE.hasOwnProperty(seleccion)) {
+    let opciones = opcionesDisponibles.map(opcion => `◉ ${opcion}`).join('\n');
+    let seleccionCategoria = prompt(`Opciones disponibles para ${cantidadPax} pasajeros:\n${opciones}`).toLowerCase();
+
+    if (COSTO_POR_NOCHE.hasOwnProperty(seleccionCategoria)) {
         let fechaCheckIn = obtenerFecha("Ingrese la fecha de ingreso (DD/MM/YYYY):");
         let fechaCheckOut = obtenerFecha("Ingrese la fecha de egreso (DD/MM/YYYY):");
 
-        let detalleReserva = calcularCostoTotal(seleccion, new Date(fechaCheckIn), new Date(fechaCheckOut));
+        let detalleReserva = calcularCostoTotal(seleccionCategoria, cantidadPax, new Date(fechaCheckIn), new Date(fechaCheckOut));
 
         if (detalleReserva !== undefined) {
-            alert(`Seleccionaste ${seleccion}\nFecha de ingreso: ${detalleReserva.fechaCheckIn}\nFecha de egreso: ${detalleReserva.fechaCheckOut.replace(/(\d+)\/(\d+)\/(\d+)/, '$2/$1/$3')}\nCantidad de noches: ${detalleReserva.cantidadDeNoches}\nCosto por noche: ${detalleReserva.costoPorNoche}\nCosto total de la estadía: ${detalleReserva.costoTotal}`);
+            alert(`Seleccionaste ${seleccionCategoria}\nNombre de habitación: ${detalleReserva.nombreHabitacion}\nCantidad de Pax: ${detalleReserva.cantidadPax}\nFecha de ingreso: ${detalleReserva.fechaCheckIn}\nFecha de egreso: ${detalleReserva.fechaCheckOut.replace(/(\d+)\/(\d+)\/(\d+)/, '$2/$1/$3')}\nCantidad de noches: ${detalleReserva.cantidadDeNoches}\nCosto por noche: ${detalleReserva.costoPorNoche}\nCosto total de la estadía: ${detalleReserva.costoTotal}`);
             
             detallesReserva.push(detalleReserva);
             presupuestoTotal += detalleReserva.costoTotal;
@@ -98,6 +108,8 @@ let resumen = "Resumen de la reserva:\n\n";
 for (let i = 0; i < detallesReserva.length; i++) {
     resumen += `Habitación ${i + 1}:\n`;
     resumen += `Categoría: ${detallesReserva[i].categoria}\n`;
+    resumen += `Nombre de habitación: ${detallesReserva[i].nombreHabitacion}\n`;
+    resumen += `Cantidad de Pax: ${detallesReserva[i].cantidadPax}\n`;
     resumen += `Fecha de ingreso: ${detallesReserva[i].fechaCheckIn}\n`;
     resumen += `Fecha de egreso: ${detallesReserva[i].fechaCheckOut}\n`;
     resumen += `Cantidad de noches: ${detallesReserva[i].cantidadDeNoches}\n`;
@@ -107,5 +119,3 @@ for (let i = 0; i < detallesReserva.length; i++) {
 
 resumen += `Presupuesto total de la reserva: ${presupuestoTotal}`;
 alert(resumen);
-
-
