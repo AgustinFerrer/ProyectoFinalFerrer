@@ -53,6 +53,7 @@ function calcularCostoTotal(categoria, cantidadPax, fechaCheckIn, fechaCheckOut)
     let cantidadDeNoches = calcularDiferenciaEnDias(new Date(formatearFecha(fechaCheckIn)), new Date(formatearFecha(fechaCheckOut)));
 
     let costoTotal = cantidadDeNoches * costoPorNoche;
+    let costoSeña = 0.3 * costoTotal;
 
     return {
         categoria: categoria,
@@ -62,6 +63,7 @@ function calcularCostoTotal(categoria, cantidadPax, fechaCheckIn, fechaCheckOut)
         cantidadDeNoches: cantidadDeNoches,
         costoPorNoche: costoPorNoche,
         costoTotal: costoTotal,
+        costoSeña: costoSeña,
         nombreHabitacion: categoria
     };
 }
@@ -69,32 +71,115 @@ function calcularCostoTotal(categoria, cantidadPax, fechaCheckIn, fechaCheckOut)
 let presupuestoTotal = 0;
 let detallesReserva = [];
 
+const contenedorReserva = document.createElement('div');
+document.body.appendChild(contenedorReserva);
+
+let filtroOrden = prompt("¿Desea filtrar por cantidad de pasajeros (1), ordenar por valor de las habitaciones (2) o ninguno (presiona Enter)?");
+
 while (true) {
-    let cantidadPax = parseInt(prompt("Ingrese la cantidad de pasajeros:"));
-    let opcionesDisponibles = Object.keys(COSTO_POR_NOCHE).filter(categoria => COSTO_POR_NOCHE[categoria].pasajeros >= cantidadPax);
+    if (filtroOrden === "1") {
+        let cantidadPax = parseInt(prompt("Ingrese la cantidad de pasajeros:"));
+        let opcionesDisponibles = Object.keys(COSTO_POR_NOCHE).filter(categoria => COSTO_POR_NOCHE[categoria].pasajeros >= cantidadPax);
 
-    if (opcionesDisponibles.length === 0) {
-        alert("No hay opciones disponibles para la cantidad de pasajeros ingresada.");
-        continue;
-    }
+        if (opcionesDisponibles.length === 0) {
+            alert("No hay opciones disponibles para la cantidad de pasajeros ingresada.");
+        }
 
-    let opciones = opcionesDisponibles.map(opcion => `◉ ${opcion}`).join('\n');
-    let seleccionCategoria = prompt(`Opciones disponibles para ${cantidadPax} pasajeros:\n${opciones}`).toLowerCase();
+        let opciones = opcionesDisponibles.map(opcion => `◉ ${opcion}`).join('\n');
+        let seleccionCategoria = prompt(`Opciones disponibles para ${cantidadPax} pasajeros:\n${opciones}`).toLowerCase();
 
-    if (COSTO_POR_NOCHE.hasOwnProperty(seleccionCategoria)) {
-        let fechaCheckIn = obtenerFecha("Ingrese la fecha de ingreso (DD/MM/YYYY):");
-        let fechaCheckOut = obtenerFecha("Ingrese la fecha de egreso (DD/MM/YYYY):");
+        if (COSTO_POR_NOCHE.hasOwnProperty(seleccionCategoria)) {
+            let fechaCheckIn = obtenerFecha("Ingrese la fecha de ingreso (DD/MM/YYYY):");
+            let fechaCheckOut = obtenerFecha("Ingrese la fecha de egreso (DD/MM/YYYY):");
 
-        let detalleReserva = calcularCostoTotal(seleccionCategoria, cantidadPax, new Date(fechaCheckIn), new Date(fechaCheckOut));
+            let detalleReserva = calcularCostoTotal(seleccionCategoria, cantidadPax, new Date(fechaCheckIn), new Date(fechaCheckOut));
 
-        if (detalleReserva !== undefined) {
-            alert(`Seleccionaste ${seleccionCategoria}\nNombre de habitación: ${detalleReserva.nombreHabitacion}\nCantidad de Pax: ${detalleReserva.cantidadPax}\nFecha de ingreso: ${detalleReserva.fechaCheckIn}\nFecha de egreso: ${detalleReserva.fechaCheckOut.replace(/(\d+)\/(\d+)\/(\d+)/, '$2/$1/$3')}\nCantidad de noches: ${detalleReserva.cantidadDeNoches}\nCosto por noche: ${detalleReserva.costoPorNoche}\nCosto total de la estadía: ${detalleReserva.costoTotal}`);
-            
-            detallesReserva.push(detalleReserva);
-            presupuestoTotal += detalleReserva.costoTotal;
+            if (detalleReserva !== undefined) {
+                contenedorReserva.innerHTML += `<p>Seleccionaste ${seleccionCategoria}</p>
+                                                <p>Nombre de habitación: ${detalleReserva.nombreHabitacion}</p>
+                                                <p>Cantidad de Pax: ${detalleReserva.cantidadPax}</p>
+                                                <p>Fecha de ingreso: ${detalleReserva.fechaCheckIn.replace(/(\d+)\/(\d+)\/(\d+)/, '$2/$1/$3')}</p>
+                                                <p>Fecha de egreso: ${detalleReserva.fechaCheckOut.replace(/(\d+)\/(\d+)\/(\d+)/, '$2/$1/$3')}</p>
+                                                <p>Cantidad de noches: ${detalleReserva.cantidadDeNoches}</p>
+                                                <p>Costo por noche: ${detalleReserva.costoPorNoche}</p>
+                                                <p>Costo total de la estadía: ${detalleReserva.costoTotal}</p>
+                                                <p>Costo de la seña: ${detalleReserva.costoSeña}</p>`;
+
+                detallesReserva.push(detalleReserva);
+                presupuestoTotal += detalleReserva.costoTotal;
+            }
+        } else {
+            alert("CATEGORÍA INCORRECTA!!!");
+        }
+    } else if (filtroOrden === "2") {
+        let tipoOrden = prompt("¿Desea ordenar de menor a mayor (1) o de mayor a menor (2)?");
+
+        let opcionesOrdenadas = Object.entries(COSTO_POR_NOCHE).sort((a, b) => {
+            let orden = tipoOrden === "1" ? 1 : -1;
+            return orden * (a[1].precio - b[1].precio);
+        });
+
+        let opciones = opcionesOrdenadas.map(opcion => `◉ ${opcion[0]}`).join('\n');
+        let seleccionCategoria = prompt(`Opciones ordenadas por valor:\n${opciones}`).toLowerCase();
+
+        if (COSTO_POR_NOCHE.hasOwnProperty(seleccionCategoria)) {
+            let fechaCheckIn = obtenerFecha("Ingrese la fecha de ingreso (DD/MM/YYYY):");
+            let fechaCheckOut = obtenerFecha("Ingrese la fecha de egreso (DD/MM/YYYY):");
+
+            let detalleReserva = calcularCostoTotal(seleccionCategoria, COSTO_POR_NOCHE[seleccionCategoria].pasajeros, new Date(fechaCheckIn), new Date(fechaCheckOut));
+
+            if (detalleReserva !== undefined) {
+                contenedorReserva.innerHTML += `<p>Seleccionaste ${seleccionCategoria}</p>
+                                                <p>Nombre de habitación: ${detalleReserva.nombreHabitacion}</p>
+                                                <p>Cantidad de Pax: ${detalleReserva.cantidadPax}</p>
+                                                <p>Fecha de ingreso: ${detalleReserva.fechaCheckIn.replace(/(\d+)\/(\d+)\/(\d+)/, '$2/$1/$3')}</p>
+                                                <p>Fecha de egreso: ${detalleReserva.fechaCheckOut.replace(/(\d+)\/(\d+)\/(\d+)/, '$2/$1/$3')}</p>
+                                                <p>Cantidad de noches: ${detalleReserva.cantidadDeNoches}</p>
+                                                <p>Costo por noche: ${detalleReserva.costoPorNoche}</p>
+                                                <p>Costo total de la estadía: ${detalleReserva.costoTotal}</p>
+                                                <p>Costo de la seña: ${detalleReserva.costoSeña}</p>`;
+
+                detallesReserva.push(detalleReserva);
+                presupuestoTotal += detalleReserva.costoTotal;
+            }
+        } else {
+            alert("CATEGORÍA INCORRECTA!!!");
         }
     } else {
-        alert("CATEGORÍA INCORRECTA!!!");
+        let cantidadPax = parseInt(prompt("Ingrese la cantidad de pasajeros:"));
+        let opcionesDisponibles = Object.keys(COSTO_POR_NOCHE).filter(categoria => COSTO_POR_NOCHE[categoria].pasajeros >= cantidadPax);
+
+        if (opcionesDisponibles.length === 0) {
+            alert("No hay opciones disponibles para la cantidad de pasajeros ingresada.");
+            continue;
+        }
+
+        let opciones = opcionesDisponibles.map(opcion => `◉ ${opcion}`).join('\n');
+        let seleccionCategoria = prompt(`Opciones disponibles para ${cantidadPax} pasajeros:\n${opciones}`).toLowerCase();
+
+        if (COSTO_POR_NOCHE.hasOwnProperty(seleccionCategoria)) {
+            let fechaCheckIn = obtenerFecha("Ingrese la fecha de ingreso (DD/MM/YYYY):");
+            let fechaCheckOut = obtenerFecha("Ingrese la fecha de egreso (DD/MM/YYYY):");
+
+            let detalleReserva = calcularCostoTotal(seleccionCategoria, cantidadPax, new Date(fechaCheckIn), new Date(fechaCheckOut));
+
+            if (detalleReserva !== undefined) {
+                contenedorReserva.innerHTML += `<p>Seleccionaste ${seleccionCategoria}</p>
+                                                <p>Nombre de habitación: ${detalleReserva.nombreHabitacion}</p>
+                                                <p>Cantidad de Pax: ${detalleReserva.cantidadPax}</p>
+                                                <p>Fecha de ingreso: ${detalleReserva.fechaCheckIn.replace(/(\d+)\/(\d+)\/(\d+)/, '$2/$1/$3')}</p>
+                                                <p>Fecha de egreso: ${detalleReserva.fechaCheckOut.replace(/(\d+)\/(\d+)\/(\d+)/, '$2/$1/$3')}</p>
+                                                <p>Cantidad de noches: ${detalleReserva.cantidadDeNoches}</p>
+                                                <p>Costo por noche: ${detalleReserva.costoPorNoche}</p>
+                                                <p>Costo total de la estadía: ${detalleReserva.costoTotal}</p>
+                                                <p>Costo de la seña: ${detalleReserva.costoSeña}</p>`;
+
+                detallesReserva.push(detalleReserva);
+                presupuestoTotal += detalleReserva.costoTotal;
+            }
+        } else {
+            alert("CATEGORÍA INCORRECTA!!!");
+        }
     }
 
     let respuesta = prompt("¿Desea agregar otra habitación? (si/no)");
@@ -104,18 +189,3 @@ while (true) {
     }
 }
 
-let resumen = "Resumen de la reserva:\n\n";
-for (let i = 0; i < detallesReserva.length; i++) {
-    resumen += `Habitación ${i + 1}:\n`;
-    resumen += `Categoría: ${detallesReserva[i].categoria}\n`;
-    resumen += `Nombre de habitación: ${detallesReserva[i].nombreHabitacion}\n`;
-    resumen += `Cantidad de Pax: ${detallesReserva[i].cantidadPax}\n`;
-    resumen += `Fecha de ingreso: ${detallesReserva[i].fechaCheckIn}\n`;
-    resumen += `Fecha de egreso: ${detallesReserva[i].fechaCheckOut}\n`;
-    resumen += `Cantidad de noches: ${detallesReserva[i].cantidadDeNoches}\n`;
-    resumen += `Costo por noche: ${detallesReserva[i].costoPorNoche}\n`;
-    resumen += `Costo total: ${detallesReserva[i].costoTotal}\n\n`;
-}
-
-resumen += `Presupuesto total de la reserva: ${presupuestoTotal}`;
-alert(resumen);
