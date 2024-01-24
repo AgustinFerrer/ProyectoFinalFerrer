@@ -1,0 +1,875 @@
+/*!--------- RESET ---------!*/
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    color: #292929;
+}
+
+body {
+    font-family: 'Montserrat', sans-serif;
+    background-color: #e6e6e6;
+}
+
+.nikkei {
+    background-color: #f7b99d;
+}
+
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    width: 100%;
+}
+
+header .navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    background-color: #266dd6;
+}
+
+header .navbar .container-fluid {
+    display: flex;
+    flex-direction: row;
+}
+
+header .navbar .container-fluid a h1 {
+    display: none;
+}
+
+header .navbar .container-fluid a img {
+    width: auto;
+    height: 50px;
+}
+
+header .navbar .container-fluid a .logo-movile {
+    display: none;
+}
+
+header .navbar .container-fluid .collapse {
+    justify-content: right;
+}
+
+header .navbar .container-fluid .collapse .navbar-nav .nav-item {
+    text-align: center;
+}
+
+header .navbar .container-fluid .collapse .navbar-nav .nav-item .nav-link {
+    text-align: center;
+    color: white;
+    transition: all 0.5s ease;
+}
+
+header .navbar .container-fluid .collapse .navbar-nav .nav-item .nav-link:hover {
+    background-color: white;
+    color: #266dd6;
+    border-radius: 25px;
+    padding: 5px 10px;
+    margin: 0px 20px 0px 20px;
+}
+
+/*------ HEADER NIKKEI ------*/
+.header-nikkei .navbar {
+    background-color: #fa986b;
+}
+
+.header-nikkei .navbar .container-fluid img {
+    width: auto;
+    height: 50px;
+}
+
+.header-nikkei .navbar .container-fluid .logo-movile-nikkei {
+    display: none;
+}
+
+.header-nikkei .navbar .container-fluid .collapse .navbar-nav .nav-item .nav-link-nikkei {
+    color: white;
+    transition: all 0.5s ease;
+}
+
+.header-nikkei .navbar .container-fluid .collapse .navbar-nav .nav-item .nav-link-nikkei:hover {
+    background-color: white;
+    color: #fa986b;
+    border-radius: 25px;
+    padding: 5px 10px;
+    margin: 0px 20px 0px 20px;
+}
+
+/*------ MAIN INDEX ------*/
+.paisaje {
+    text-align: center;
+    width: 100%;
+    height: calc(100vh - 76px);
+    background-image: url(../img/vista-terraza.jpg);
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.paisaje h2 {
+    color: white;
+    font-family: "Montserrat", Sans-serif;
+    font-size: 50px;
+    font-weight: 400;
+    letter-spacing: 2.1px;
+    text-shadow: 5px 0px 22px black;
+}
+
+section h2 {
+    font-size: 30px;
+    font-weight: 600;
+    line-height: 44px;
+    margin-top: 20px;
+    margin-bottom: 0px;
+    text-align: center;
+}
+
+section .el-hotel {
+    padding-left: 20px;
+    padding-right: 20px;
+    display: flex;
+    justify-content: space-evenly;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+
+section .el-hotel div {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    flex-wrap: wrap;
+    margin-top: 30px;
+    margin-left: 10px;
+    margin-right: 10px;
+}
+
+section .el-hotel div img {
+    width: 250px;
+    height: 250px;
+    flex-wrap: wrap;
+}
+
+section .el-hotel div p {
+    display: flex;
+    width: 250px;
+    height: auto;
+    line-height: 27px;
+    letter-spacing: 0px;
+    flex-wrap: wrap;
+    text-align: center;
+    margin-top: 15px;
+}
+
+.galeria {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    padding-bottom: 30px;
+}
+
+.galeria h2 {
+    font-size: 30px;
+    font-weight: 600;
+    line-height: 44px;
+}
+
+.galeria .carousel .carousel-inner {
+    height: auto;
+    width: auto;
+}
+
+.galeria .carousel .carousel-inner .carousel-item img {
+    height: 500px;
+    width: auto;
+}
+
+.ubicacion {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    flex-wrap: wrap;
+    padding-bottom: 20px;
+}
+
+.ubicacion img {
+    display: flex;
+    justify-content: center;
+}
+
+.ubicacion h2 {
+    color: #333333;
+    font-size: 17px;
+    font-weight: 500;
+    line-height: 27px;
+    display: flex;
+    text-align: center;
+}
+
+/*------ MAIN HABITACIONES ------*/
+.habitaciones {
+    height: auto;
+}
+
+.habitaciones .titulo {
+    display: flex;
+    justify-content: center;
+}
+
+.habitaciones .titulo h1 {
+    font-size: 30px;
+    font-weight: 600;
+    line-height: 44px;
+    margin: 5px;
+}
+
+.habitaciones .categorias {
+    display: flex;
+    justify-content: space-evenly;
+    flex-wrap: wrap;
+}
+
+.habitaciones .categorias .card {
+    display: flex;
+    justify-content: space-evenly;
+    text-align: center;
+    flex-direction: column;
+    margin-top: 5px;
+    margin-left: 10px;
+    margin-right: 10px;
+    margin-bottom: 10px;
+    width: 18rem;
+}
+
+.habitaciones .categorias .card:hover {
+    box-shadow: 5px 5px 30px rgba(21, 54, 116, 0.781);
+    transform: scale(1.07);
+}
+
+.habitaciones .categorias .card:hover .card-body h2 {
+    font-size: 26px;
+}
+
+.habitaciones .categorias .card img {
+    width: 286px;
+    height: 200px;
+}
+
+.habitaciones .categorias .card div {
+    display: flex;
+    justify-content: space-between;
+    flex-direction: column;
+}
+
+.habitaciones .categorias .card h2 {
+    font-size: 25px;
+    font-weight: 600;
+    text-align: center;
+    line-height: 30px;
+    margin-top: 0px;
+}
+
+.habitaciones .categorias .card p {
+    text-align: center;
+}
+
+.info div {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    text-align: center;
+    flex-wrap: wrap;
+    padding: 10px;
+}
+
+.info div h2 {
+    font-size: 30px;
+    font-weight: 600;
+    line-height: 44px;
+    margin-top: 0px;
+    margin-bottom: 0px;
+}
+
+.info div h3 {
+    font-size: 17px;
+    font-weight: 400;
+    line-height: 27px;
+}
+
+.info div h4 {
+    font-size: 17px;
+    font-weight: 500;
+    line-height: 27px;
+}
+
+/*------ MAIN NIKKEI ------*/
+.terraza-de-noche {
+    text-align: center;
+    width: 100%;
+    height: calc(100vh - 76px);
+    background-image: url(../img/mesa-de-noche.JPG);
+    background-size: cover;
+    background-position: bottom;
+    background-attachment: fixed;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.terraza-de-noche h1 {
+    color: white;
+    font-family: "Montserrat", Sans-serif;
+    font-size: 50px;
+    font-weight: 400;
+    letter-spacing: 2.1px;
+    text-shadow: 5px 0px 22px black;
+}
+
+.terraza-de-noche h2 {
+    color: white;
+    font-family: "Montserrat",
+        Sans-serif;
+    font-size: 30px;
+    font-weight: 300;
+    letter-spacing: 2.1px;
+    text-shadow: 5px 0px 22px black;
+}
+
+/*------ MAIN PROYECTO ------*/
+.proyectos {
+    color: #292727;
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+.proyectos h1 {
+    display: flex;
+    justify-content: center;
+    font-size: 30px;
+    font-weight: 600;
+    text-align: center;
+    margin: 0px;
+}
+
+.proyectos .video {
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    flex-direction: row;
+    flex-wrap: wrap;
+    margin: 0px;
+}
+
+.proyectos .video .card {
+    margin: 10px;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    width: 25rem;
+}
+
+.proyectos .video .card:hover {
+    box-shadow: 5px 5px 30px rgba(21, 54, 116, 0.781);
+    transform: scale(1.07);
+}
+
+.proyectos .video .card:hover .card-body h2 {
+    font-size: 20px;
+}
+
+.proyectos .video .card .card-body {
+    display: flex;
+    justify-content: space-between;
+    flex-direction: column;
+}
+
+.proyectos .video .card h2 {
+    font-size: 18px;
+    text-align: center;
+}
+
+.proyectos .video .card a:hover {
+    background-color: #0045c4;
+}
+
+/*------ MAIN CONTACTO ------*/
+.section-contacto {
+    height: calc(100vh - 76px);
+}
+
+.section-contacto h1 {
+    margin: 10px;
+    font-size: 30px;
+    font-weight: 600;
+    line-height: 44px;
+    letter-spacing: 2.1px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+.section-contacto .contacto {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+}
+
+.section-contacto .contacto .mapa {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: auto;
+    height: auto;
+}
+
+.section-contacto .contacto .mapa iframe {
+    width: 400px;
+    height: 300px;
+}
+
+.section-contacto .contacto .datos-contacto {
+    width: auto;
+    height: auto;
+    display: flex;
+    justify-content: space-evenly;
+    align-items: left;
+    flex-direction: column;
+    font-size: 22px;
+    font-weight: 400;
+    line-height: 34px;
+    padding: 10px;
+}
+
+.section-contacto .contacto .datos-contacto .datos div p {
+    font-size: 22px;
+    font-weight: 400;
+    line-height: 34px;
+    padding: 10px;
+}
+
+/*------ MAIN FORMULARIO ------*/
+.formulario {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    height: auto;
+    margin-bottom: 20px;
+}
+
+.formulario h1 {
+    font-size: 30px;
+    font-weight: 600;
+    line-height: 44px;
+    margin-top: 0px;
+    margin-bottom: 0px;
+    text-align: center;
+    margin: 20px;
+}
+
+.formulario div {
+    display: flex;
+    justify-content: center;
+}
+
+.formulario div form {
+    width: 80%;
+}
+
+.formulario div form .mb-3 {
+    display: flex;
+    flex-direction: column;
+}
+
+footer {
+    background-color: #266dd6;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-direction: column;
+    flex-wrap: wrap;
+}
+
+footer h2 {
+    color: white;
+    font-size: 20px;
+    font-weight: 500;
+    margin: 10px;
+    flex-wrap: wrap;
+    text-align: center;
+}
+
+footer img {
+    width: auto;
+    height: 40px;
+    margin: 0px 20px 10px 20px;
+}
+
+.footer-nikkei {
+    background-color: #fa986b;
+}
+
+/*!--------- MEDIA QUERYS ---------!*/
+@media screen and (max-width: 880px) {
+    .proyectos .video .card {
+        width: 60rem;
+    }
+}
+
+@media screen and (max-width: 850px) {
+    .paisaje h2 {
+        color: white;
+        font-family: "Montserrat", Sans-serif;
+        font-size: 40px;
+        font-weight: 400;
+        letter-spacing: 2.1px;
+        text-shadow: 5px 0px 22px #000000;
+    }
+
+    .galeria .carousel {
+        height: 400px;
+        width: auto;
+    }
+
+    .galeria .carousel .carousel-inner .carousel-item img {
+        height: 500px;
+        width: auto;
+    }
+}
+
+@media screen and (max-width: 800px) {
+    .galeria .carousel {
+        height: 450px;
+        width: auto;
+    }
+
+    .galeria .carousel .carousel-inner .carousel-item img {
+        height: 450px;
+        width: auto;
+    }
+}
+
+@media screen and (max-width: 720px) {
+    .galeria .carousel {
+        height: 400px;
+        width: auto;
+    }
+
+    .galeria .carousel .carousel-inner .carousel-item img {
+        height: 400px;
+        width: auto;
+    }
+}
+
+@media screen and (max-width: 700px) {
+    .section-contacto {
+        height: auto;
+        width: auto;
+    }
+
+    .section-contacto .contacto {
+        display: grid;
+        grid-template-columns: 1fr;
+        grid-template-rows: auto;
+    }
+
+    .section-contacto .contacto .datos-contacto {
+        width: auto;
+        height: auto;
+        display: flex;
+        justify-content: space-evenly;
+        align-items: center;
+        text-align: center;
+        flex-direction: column;
+        line-height: 34px;
+        padding: 10px;
+    }
+}
+
+@media screen and (max-width: 650px) {
+    .galeria .carousel {
+        height: 350px;
+        width: auto;
+    }
+
+    .galeria .carousel .carousel-inner .carousel-item img {
+        height: 350px;
+        width: auto;
+    }
+
+    .habitaciones {
+        height: auto;
+    }
+
+    .habitaciones .titulo {
+        display: flex;
+        justify-content: center;
+    }
+
+    .habitaciones .titulo h1 {
+        font-size: 30px;
+        font-weight: 600;
+        line-height: 44px;
+        margin: 5px;
+    }
+
+    .habitaciones .categorias .card {
+        width: 40rem;
+    }
+
+    .habitaciones .categorias .card img {
+        width: auto;
+        height: auto;
+    }
+}
+
+@media screen and (max-width: 550px) {
+    .galeria .carousel {
+        height: 300px;
+        width: auto;
+    }
+
+    .galeria .carousel .carousel-inner .carousel-item img {
+        height: 300px;
+        width: auto;
+    }
+
+    .paisaje h2 {
+        font-size: 30px;
+    }
+}
+
+@media screen and (max-width: 500px) {
+    .paisaje {
+        height: calc(100vh - 66px);
+    }
+
+    .galeria .carousel {
+        height: 250px;
+        width: auto;
+    }
+
+    .galeria .carousel .carousel-inner .carousel-item img {
+        height: 250px;
+        width: auto;
+    }
+}
+
+@media screen and (max-width: 450px) {
+    .galeria .carousel {
+        height: 200px;
+        width: auto;
+    }
+
+    .galeria .carousel .carousel-inner .carousel-item img {
+        height: 200px;
+        width: auto;
+    }
+
+    .section-contacto h1 {
+        font-size: 25px;
+    }
+
+    .section-contacto .contacto .mapa iframe {
+        width: 350px;
+        height: 250px;
+    }
+
+    .section-contacto .contacto .datos-contacto .datos div p {
+        font-size: 18px;
+        font-weight: 400;
+    }
+
+    footer h2 {
+        font-size: 18px;
+    }
+
+    .terraza-de-noche {
+        height: calc(100vh - 66px);
+    }
+
+    .terraza-de-noche h1 {
+        color: white;
+        font-size: 40px;
+        font-family: "Montserrat", Sans-serif;
+        font-weight: 400;
+        text-shadow: 5px 0px 22px #000000;
+    }
+
+    .terraza-de-noche h2 {
+        color: white;
+        font-family: "Montserrat", Sans-serif;
+        font-size: 20px;
+        font-weight: 400;
+        text-shadow: 5px 0px 22px #000000;
+    }
+}
+
+@media screen and (max-width: 410px) {
+    header .navbar .container-fluid a img {
+        display: none;
+    }
+
+    header .navbar .container-fluid a .logo-movile {
+        display: block;
+    }
+
+    .header-nikkei .navbar {
+        background-color: #fa986b;
+    }
+
+    .header-nikkei .navbar .container-fluid .div-nikkei {
+        display: flex;
+        flex-direction: row;
+    }
+
+    .header-nikkei .navbar .container-fluid .div-nikkei a img {
+        display: none;
+    }
+
+    .header-nikkei .navbar .container-fluid .div-nikkei a .logo-movile {
+        display: block;
+    }
+
+    .header-nikkei .navbar .container-fluid .div-nikkei img {
+        display: none;
+    }
+
+    .header-nikkei .navbar .container-fluid .div-nikkei .logo-movile-nikkei {
+        display: block;
+    }
+}
+
+@media screen and (max-width: 390px) {
+    .terraza-de-noche {
+        height: calc(100vh - 57.83px);
+    }
+
+    .paisaje {
+        height: calc(100vh - 57.83px);
+    }
+}
+
+@media screen and (max-width: 370px) {
+    .section-contacto h1 {
+        font-size: 20px;
+    }
+
+    .section-contacto .contacto .mapa iframe {
+        width: 300px;
+        height: 200px;
+    }
+
+    .section-contacto .contacto .datos-contacto .datos div p {
+        font-size: 15px;
+        font-weight: 400;
+    }
+
+    footer h2 {
+        font-size: 15px;
+    }
+
+    .paisaje h2 {
+        font-size: 20px;
+    }
+}
+
+@media screen and (max-width: 320px) {
+    .galeria .carousel {
+        height: 180px;
+        width: auto;
+    }
+
+    .galeria .carousel .carousel-inner .carousel-item img {
+        height: 180px;
+        width: auto;
+    }
+
+    .section-contacto .contacto .mapa iframe {
+        width: 250px;
+        height: 150px;
+    }
+}
+
+@media screen and (max-width: 300px) {
+    .galeria .carousel {
+        height: 160px;
+        width: auto;
+    }
+
+    .galeria .carousel .carousel-inner .carousel-item img {
+        height: 160px;
+        width: auto;
+    }
+
+    .section-contacto h1 {
+        font-size: 18px;
+    }
+}
+/* Agrega este código al final del CSS existente */
+
+/* Estilos para la sección del formulario */
+section {
+    margin-top: 20px;
+    text-align: center;
+}
+
+#filtroForm {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+label {
+    margin-right: 10px;
+    color: #292929; /* Color de texto general */
+}
+
+select {
+    padding: 5px;
+    margin-bottom: 10px;
+    background-color: #ffffff; /* Color de fondo para selects */
+    color: #292929; /* Color de texto para selects */
+    border: 1px solid #cccccc; /* Borde de selects */
+    border-radius: 5px;
+}
+
+button {
+    padding: 10px;
+    background-color: #266dd6;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #0045c4;
+}
+
+/* Estilos específicos para los selects */
+#pax, #jacuzzi, #precioOrden, #vista {
+    width: 150px;
+}
+
+/* Estilos responsivos para adaptar el formulario a tamaños más pequeños */
+@media (max-width: 600px) {
+    #filtroForm {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    select {
+        width: 100%;
+        margin-bottom: 10px;
+    }
+}
