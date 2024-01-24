@@ -1,4 +1,3 @@
-
 const COSTO_POR_NOCHE = [
     { categoria: "doble  plus con vista", precio: 75000, pasajeros: 2, vista: "si", hidromasaje: "si", img: "./img/doble-indoor.jpg" },
     { categoria: "doble  estandar con vista", precio: 60000, pasajeros: 2, vista: "si", hidromasaje: "no", img: "./img/doble-indoor.jpg" },
@@ -10,10 +9,12 @@ const COSTO_POR_NOCHE = [
     { categoria: "triple plus con vista", precio: 105000, pasajeros: 3, vista: "si", hidromasaje: "si", img: "./img/doble-indoor.jpg" },
 ];
 
+
 const habitacionesContainer = document.getElementById("habitacionesContainer");
-const contenedorReserva = document.createElement('div');
-contenedorReserva.id = "reservaContainer";
-document.body.appendChild(contenedorReserva);
+const contenedorReserva = document.getElementById("reservaContainer");
+
+// Arreglo para almacenar reservas
+const reservas = [];
 
 // Función para crear tarjetas de habitaciones
 function crearTarjetas(habitaciones) {
@@ -29,19 +30,23 @@ function crearTarjetas(habitaciones) {
                 <p class="card-text">Pax: ${habitacionInfo.pasajeros}</p>
                 <p class="card-text">Vista: ${habitacionInfo.vista}</p>
                 <p class="card-text">Hidromasaje: ${habitacionInfo.hidromasaje}</p>
-                <a href="#" class="btn btn-primary reservar-btn">RESERVAR</a>
+                <a href="#" class="btn btn-primary reservar-btn" data-categoria="${habitacionInfo.categoria}">RESERVAR</a>
             </div>
         `;
 
         habitacionesContainer.appendChild(habitacionCard);
-    }
+    }g
 
     // Event Listener para el botón "RESERVAR"
     const botonesReservar = document.querySelectorAll(".reservar-btn");
     botonesReservar.forEach((boton) => {
         boton.addEventListener("click", () => {
             // Obtener la categoría de la habitación seleccionada
-            const seleccionCategoria = boton.parentElement.querySelector(".card-title").textContent;
+            const seleccionCategoria = boton.dataset.categoria;
+
+            // Guardar la habitación seleccionada en localStorage
+            localStorage.setItem("habitacionSeleccionada", seleccionCategoria);
+
             // Ocultar las tarjetas de habitaciones
             habitacionesContainer.style.display = "none";
 
@@ -104,14 +109,21 @@ function crearTarjetas(habitaciones) {
             document.getElementById("confirmarReserva").addEventListener("click", (event) => {
                 event.preventDefault(); // Evitar que el formulario se envíe de forma predeterminada
 
-                // Obtener los datos del formulario
-                const ingreso = document.getElementById("ingreso").value;
-                const egreso = document.getElementById("egreso").value;
-                const pasajeros = document.getElementById("pasajeros").value;
-                
+                // Recuperar la reserva almacenada en localStorage al cargar la página
+                const reservaGuardada = localStorage.getItem("reserva");
+                if (reservaGuardada) {
+                    const reserva = JSON.parse(reservaGuardada);
+                    document.getElementById("nombre").value = reserva.nombre;
+                    document.getElementById("apellido").value = reserva.apellido;
+                    document.getElementById("documento").value = reserva.documento;
+                    document.getElementById("ingreso").value = reserva.fechaCheckIn;
+                    document.getElementById("egreso").value = reserva.fechaCheckOut;
+                    document.getElementById("pasajeros").value = reserva.cantidadPax;
+                    document.getElementById("telefono").value = reserva.telefono;
+                    document.getElementById("email").value = reserva.email;
+                }
 
                 // Lógica de cálculo de tarifas
-                let seleccionCategoria = document.querySelector(".card-title").textContent;
                 let cantidadPax = parseInt(pasajeros);
                 let fechaCheckIn = new Date(ingreso);
                 let fechaCheckOut = new Date(egreso);
@@ -120,93 +132,32 @@ function crearTarjetas(habitaciones) {
                 let detalleReserva = calcularCostoTotal(seleccionCategoria, cantidadPax, fechaCheckIn, fechaCheckOut);
 
                 if (detalleReserva !== undefined) {
+                    // Agregar datos del huésped a la reserva
+                    detalleReserva.nombre = nombre;
+                    detalleReserva.apellido = apellido;
+                    detalleReserva.documento = documento;
+                    detalleReserva.telefono = telefono;
+                    detalleReserva.email = email;
+
+                    // Agregar la reserva al arreglo
+                    reservas.push(detalleReserva);
+
                     // Mostrar detalles de la reserva
                     mostrarDetallesReserva(detalleReserva);
 
                     // Ocultar el formulario
                     formularioSection.style.display = "none";
+
+                    // Mostrar el div de todas las reservas
+                    mostrarTodasLasReservas();
                 }
             });
-
         });
     });
 }
-// Función para calcular el costo total de la estancia
-function calcularCostoTotal(categoria, cantidadPax, fechaCheckIn, fechaCheckOut) {
-    // Calcular la cantidad de noches
-    const tiempoMilisegundosPorDia = 24 * 60 * 60 * 1000; // 1 día en milisegundos
-    const cantidadNoches = Math.round((fechaCheckOut - fechaCheckIn) / tiempoMilisegundosPorDia);
-
-    // Buscar la habitación en el array de precios
-    const habitacion = COSTO_POR_NOCHE.find(h => h.categoria === categoria);
-
-    if (habitacion) {
-        // Calcular el costo total
-        const costoTotal = cantidadNoches * habitacion.precio;
-
-        // Calcular la seña (30% del total)
-        const costoSeña = 0.3 * costoTotal;
-
-        // Crear y retornar el objeto con los detalles de la reserva
-        return {
-            categoria,
-            cantidadPax,
-            fechaCheckIn: fechaCheckIn.toLocaleDateString(),
-            fechaCheckOut: fechaCheckOut.toLocaleDateString(),
-            cantidadDeNoches: cantidadNoches,
-            costoPorNoche: habitacion.precio,
-            costoTotal,
-            costoSeña
-        };
-    } else {
-        console.error("La categoría de habitación no se encontró en la lista de precios.");
-        return undefined;
-    }
-}
-
-// Función para aplicar filtros
-function aplicarFiltros() {
-    const paxFiltro = document.getElementById("pax").value;
-    const jacuzziFiltro = document.getElementById("jacuzzi").value;
-    const precioOrdenFiltro = document.getElementById("precioOrden").value;
-    const vistaFiltro = document.getElementById("vista").value;
-
-    // Filtrar habitaciones según los criterios seleccionados
-    const habitacionesFiltradas = COSTO_POR_NOCHE.filter(habitacion => {
-        return (paxFiltro === "todos" || habitacion.pasajeros === parseInt(paxFiltro)) &&
-            (jacuzziFiltro === "todos" || habitacion.hidromasaje === jacuzziFiltro) &&
-            (vistaFiltro === "todos" || habitacion.vista === vistaFiltro);
-    });
-
-    // Ordenar habitaciones por precio si es necesario
-    if (precioOrdenFiltro === "asc") {
-        habitacionesFiltradas.sort((a, b) => a.precio - b.precio);
-    } else if (precioOrdenFiltro === "desc") {
-        habitacionesFiltradas.sort((a, b) => b.precio - a.precio);
-    }
-
-    // Limpiar el contenedor antes de agregar las nuevas tarjetas
-    habitacionesContainer.innerHTML = "";
-
-    // Crear y agregar las nuevas tarjetas al contenedor
-    crearTarjetas(habitacionesFiltradas);
-}
-
-// ... (código existente)
 
 // Función para mostrar detalles de la reserva
 function mostrarDetallesReserva(detalleReserva) {
-    // Obtener los datos del formulario
-    const nombre = document.getElementById("nombre").value;
-    const apellido = document.getElementById("apellido").value;
-    const documento = document.getElementById("documento").value;
-    const telefono = document.getElementById("telefono").value;
-    const email = document.getElementById("email").value;
-
-    // Ocultar el formulario
-    const formulario = document.querySelector(".formulario");
-    formulario.style.display = "none";
-
     // Excluir campos del formulario que no deben mostrarse en el detalle
     const camposExcluidos = ["nombre", "apellido", "documento", "telefono", "email"];
 
@@ -216,62 +167,89 @@ function mostrarDetallesReserva(detalleReserva) {
     detallesReservaDiv.innerHTML = `
         <h2>DETALLES DE LA RESERVA</h2>
         <h3>DATOS DEL HUÉSPED</h3>
-        <p>Nombre: ${nombre}</p>
-        <p>Apellido: ${apellido}</p>
-        <p>Documento: ${documento}</p>
-        <p>Teléfono: ${telefono}</p>
-        <p>Email: ${email}</p>
-        <h4>COSTOS DE LA HABITACIÓN</h4>
-        <h5>${detalleReserva.categoria}</h5>
-        <p>IN: ${detalleReserva.fechaCheckIn}</p>
-        <p>OUT: ${detalleReserva.fechaCheckOut}</p>
+        <p>Nombre: ${detalleReserva.nombre}</p>
+        <p>Apellido: ${detalleReserva.apellido}</p>
+        <p>Documento: ${detalleReserva.documento}</p>
+        <p>Teléfono: ${detalleReserva.telefono}</p>
+        <p>Email: ${detalleReserva.email}</p>
+        <h3>DATOS DE LA RESERVA</h3>
+        <p>Categoría: ${detalleReserva.categoria}</p>
+        <p>Check-In: ${detalleReserva.fechaCheckIn}</p>
+        <p>Check-Out: ${detalleReserva.fechaCheckOut}</p>
         <p>Pax: ${detalleReserva.cantidadPax}</p>
-        <p>Costo por Noche: $${detalleReserva.costoPorNoche}</p>
-        <p>Cantidad de Noches: ${detalleReserva.cantidadDeNoches}</p>
         <p>Costo Total: $${detalleReserva.costoTotal}</p>
-        <p>Costo Seña (30%): $${detalleReserva.costoSeña}</p>
+        <button type="button" class="btn btn-primary" id="reservarOtra">Reservar Otra Habitación</button>
     `;
+
+    // Agregar el div al contenedor principal
     contenedorReserva.appendChild(detallesReservaDiv);
 
-    // Mostrar el div con la consulta para reservar otra habitación
-    const confirmarReservaDiv = document.createElement("div");
-    confirmarReservaDiv.id = "confirmarReservaDiv"; // Asignar un ID único
-    confirmarReservaDiv.innerHTML = `
-        <p>¿Desea reservar otra habitación?</p>
-        <button onclick="reservarOtra()">Sí</button>
-        <button onclick="ocultarConsultaReserva()">No</button>
-    `;
-    contenedorReserva.appendChild(confirmarReservaDiv);
-
-    // Función para ocultar la consulta de reserva y mostrar las tarjetas nuevamente
-    window.ocultarConsultaReserva = function () {
-        // Ocultar el div con la consulta para reservar otra habitación
-        confirmarReservaDiv.style.display = "none";
-
-        // Mostrar las tarjetas de habitaciones nuevamente
-        habitacionesContainer.style.removeProperty("display");
-
-        // Ocultar el detalle de la reserva
-        detallesReservaDiv.style.display = "none";
-    };
-
-    // Función para reservar otra habitación
-    window.reservarOtra = function () {
-        // Ocultar el div con la consulta para reservar otra habitación
-        confirmarReservaDiv.style.display = "none";
-
-        // Limpiar el detalle de la reserva almacenado
-        contenedorReserva.detalleReserva = undefined;
-
-        // Mostrar las tarjetas de habitaciones nuevamente
-        habitacionesContainer.style.removeProperty("display");
-
-        // Ocultar el detalle de la reserva
-        detallesReservaDiv.style.display = "none";
-    };
+    // Agregar evento de clic al botón "Reservar Otra Habitación"
+    document.getElementById("reservarOtra").addEventListener("click", () => {
+        // Limpiar el contenedor de reservas
+        contenedorReserva.innerHTML = "";
+        // Mostrar las tarjetas de habitaciones
+        habitacionesContainer.style.display = "grid";
+    });
 }
 
+// Función para mostrar detalles de todas las reservas
+function mostrarTodasLasReservas() {
+    // Crear el div para mostrar todas las reservas
+    const todasLasReservasDiv = document.createElement("div");
+    todasLasReservasDiv.id = "todasLasReservas"; // Asignar un ID único
+    todasLasReservasDiv.innerHTML = `
+        <h2>TODAS LAS RESERVAS</h2>
+    `;
 
-// Crear las tarjetas al cargar la página
+    // Iterar sobre las reservas y agregar detalles al div
+    reservas.forEach((reserva, index) => {
+        todasLasReservasDiv.innerHTML += `
+            <div class="reservaIndividual">
+                <h3>Reserva ${index + 1}</h3>
+                <p>Categoría: ${reserva.categoria}</p>
+                <p>Check-In: ${reserva.fechaCheckIn}</p>
+                <p>Check-Out: ${reserva.fechaCheckOut}</p>
+                <p>Pax: ${reserva.cantidadPax}</p>
+                <p>Costo Total: $${reserva.costoTotal}</p>
+            </div>
+        `;
+    });
+
+    // Agregar el div al contenedor principal
+    contenedorReserva.appendChild(todasLasReservasDiv);
+
+    // Ocultar el div de todas las reservas
+    document.getElementById("todasLasReservas").style.display = "none";
+}
+
+// Función para calcular el costo total de la reserva
+function calcularCostoTotal(categoria, cantidadPax, fechaCheckIn, fechaCheckOut) {
+    // Buscar la habitación según la categoría seleccionada
+    const habitacionSeleccionada = COSTO_POR_NOCHE.find((habitacion) => habitacion.categoria === categoria);
+
+    if (habitacionSeleccionada) {
+        // Calcular la cantidad de noches
+        const tiempoResidencia = fechaCheckOut - fechaCheckIn;
+        const cantidadNoches = tiempoResidencia / (1000 * 60 * 60 * 24);
+
+        // Calcular el costo total
+        const costoTotal = habitacionSeleccionada.precio * cantidadNoches;
+
+        // Devolver los detalles de la reserva
+        return {
+            categoria,
+            cantidadPax,
+            fechaCheckIn: fechaCheckIn.toLocaleDateString(),
+            fechaCheckOut: fechaCheckOut.toLocaleDateString(),
+            costoTotal,
+        };
+    } else {
+        // En caso de no encontrar la habitación
+        alert("Error al seleccionar la habitación");
+        return undefined;
+    }
+}
+
+// Llamar a la función para crear las tarjetas de habitaciones
 crearTarjetas(COSTO_POR_NOCHE);
-
