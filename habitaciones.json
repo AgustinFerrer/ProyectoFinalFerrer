@@ -1,10 +1,10 @@
 [
-    { "categoria": "doble  plus con vista", "precio": 75000, "pasajeros": 2, "vista": "si", "hidromasaje": "si", "img": "./img/doble-indoor.jpg" },
-    { "categoria": "doble  estandar con vista", "precio": 60000, "pasajeros": 2, "vista": "si", "hidromasaje": "no", "img": "./img/doble-indoor.jpg" },
+    { "categoria": "doble  plus con vista", "precio": 75000, "pasajeros": 2, "vista": "si", "hidromasaje": "si", "img": "./img/doble-plus-con-vista.jpg" },
+    { "categoria": "doble  estandar con vista", "precio": 60000, "pasajeros": 2, "vista": "si", "hidromasaje": "no", "img": "./img/doble-estandar-con-vista.jpg" },
     { "categoria": "doble superior con vista", "precio": 81000, "pasajeros": 2, "vista": "si", "hidromasaje": "si", "img": "./img/doble-superior-con-vista.jpg" },
     { "categoria": "duplex - dos ambientes plus con vista", "precio": 117000, "pasajeros": 4, "vista": "si", "hidromasaje": "si", "img": "./img/duplex-dos-ambientes-plus-con-vista.jpg" },
-    { "categoria": "duplex - dos ambientes con vista", "precio": 111000, "pasajeros": 4, "vista": "si", "hidromasaje": "no", "img": "./img/doble-indoor.jpg" },
-    { "categoria": "doble estandar sin vista", "precio": 54000, "pasajeros": 2, "vista": "no", "hidromasaje": "no", "img": "./img/doble-indoor.jpg" },
+    { "categoria": "duplex - dos ambientes con vista", "precio": 111000, "pasajeros": 4, "vista": "si", "hidromasaje": "no", "img": "./img/dos-ambientes-con-vista.jpg" },
+    { "categoria": "doble estandar sin vista", "precio": 54000, "pasajeros": 2, "vista": "no", "hidromasaje": "no", "img": "./img/doble-estandar-sin-vista.jpg" },
     { "categoria": "doble indoor", "precio": 45000, "pasajeros": 2, "vista": "no", "hidromasaje": "no", "img": "./img/doble-indoor.jpg" },
-    { "categoria": "triple plus con vista", "precio": 105000, "pasajeros": 3, "vista": "si", "hidromasaje": "si", "img": "./img/doble-indoor.jpg" }
+    { "categoria": "triple plus con vista", "precio": 105000, "pasajeros": 3, "vista": "si", "hidromasaje": "si", "img": "./img/triple-plus-con-vista.jpg" }
 ]

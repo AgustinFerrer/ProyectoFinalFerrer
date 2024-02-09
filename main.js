@@ -222,35 +222,32 @@ function mostrarDetallesReserva(detalleReserva) {
     const telefono = document.getElementById("telefono").value;
     const email = document.getElementById("email").value;
 
-    // Ocultar el formulario
-    const formulario = document.querySelector(".formulario");
-    formulario.style.display = "none";
-
     // Excluir campos del formulario que no deben mostrarse en el detalle
 
-    // Crear el div con los detalles de la reserva
-    const detallesReservaDiv = document.createElement("div");
-    detallesReservaDiv.id = "reservaDetalles"; // Asignar un ID único
-    detallesReservaDiv.innerHTML = `
-        <h2>DETALLES DE LA RESERVA</h2>
-        <h3>DATOS DEL HUÉSPED</h3>
-        <p>Nombre: ${nombre}</p>
-        <p>Apellido: ${apellido}</p>
-        <p>Documento: ${documento}</p>
-        <p>Teléfono: ${telefono}</p>
-        <p>Email: ${email}</p>
-        <h4>COSTOS DE LA HABITACIÓN</h4>
-        <h5>${detalleReserva.categoria}</h5>
-        <p>IN: ${detalleReserva.fechaCheckIn}</p>
-        <p>OUT: ${detalleReserva.fechaCheckOut}</p>
-        <p>Pax: ${detalleReserva.cantidadPax}</p>
-        <p>Costo por Noche: $${detalleReserva.costoPorNoche}</p>
-        <p>Cantidad de Noches: ${detalleReserva.cantidadDeNoches}</p>
-        <p>Costo Total: $${detalleReserva.costoTotal}</p>
-        <p>Costo Seña (30%): $${detalleReserva.costoSeña}</p>
+    // Crear el mensaje de la alerta con los detalles de la reserva
+    const mensajeAlerta = `
+        DATOS DEL HUÉSPED:
+        - Nombre: ${nombre}
+        - Apellido: ${apellido}
+        - Documento: ${documento}
+        - Teléfono: ${telefono}
+        - Email: ${email}
+        
+        COSTOS DE LA HABITACIÓN:
+        - Categoría: ${detalleReserva.categoria}
+        - Check-In: ${detalleReserva.fechaCheckIn}
+        - Check-Out: ${detalleReserva.fechaCheckOut}
+        - Pasajeros: ${detalleReserva.cantidadPax}
+        - Costo por Noche: $${detalleReserva.costoPorNoche}
+        - Cantidad de Noches: ${detalleReserva.cantidadDeNoches}
+        - Costo Total: $${detalleReserva.costoTotal}
+        - Costo Seña (30%): $${detalleReserva.costoSeña}
     `;
-    document.body.appendChild(detallesReservaDiv);
+
+    // Mostrar la alerta con Sweet Alert
+    swal("Detalles de la reserva", mensajeAlerta, "success");
 }
+
 
 // Función para inicializar la aplicación
 async function iniciarApp() {
