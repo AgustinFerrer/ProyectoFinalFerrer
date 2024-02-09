@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -13,17 +14,18 @@
     <!--FAVICON-->
     <link rel="shortcut icon" href="../img/favicon.ico" type="image/x-icon">
 </head>
+
 <body>
-    
+
     <section>
         <div id="filtros">
             <label for="pax">Cantidad de Pax:</label>
             <select id="pax">
                 <option value="todos">Todos</option>
-                <option value="1">1 Pax</option>
                 <option value="2">2 Pax</option>
                 <option value="3">3 Pax</option>
                 <option value="4">4 Pax</option>
+                <option value="5">5 Pax</option>
             </select>
 
             <label for="jacuzzi">Hidromasaje:</label>
@@ -45,21 +47,20 @@
                 <option value="si">Sí</option>
                 <option value="no">No</option>
             </select>
-
-            <button onclick="aplicarFiltros()">Aplicar Filtros</button>
         </div>
-        </section>
-        <section class="habitaciones">
-            <div class="titulo">
-                <h1>HABITACIONES</h1>
-            </div>
-            <div class="categorias" id="habitacionesContainer">
-                <!-- Las tarjetas de habitaciones se agregarán aquí dinámicamente -->
-            </div>
-        </section >
-        <section class="formulario"></section>
+    </section>
+    <section class="habitaciones">
+        <div class="titulo">
+            <h1>HABITACIONES</h1>
+        </div>
+        <div class="categorias" id="habitacionesContainer">
+            <!-- Las tarjetas de habitaciones se agregarán aquí dinámicamente -->
+        </div>
+    </section>
+    <section class="formulario"></section>
 
-<script src="./main.js"></script>
+    <script src="./main.js"></script>
 
 </body>
+
 </html>
