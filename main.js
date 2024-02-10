@@ -1,19 +1,43 @@
-// Función para cargar el archivo JSON
-async function cargarHabitacionesDesdeJSON() {
+// Función para cargar el archivo JSON desde el almacenamiento local del navegador
+async function cargarHabitacionesDesdeLocalStorage() {
     try {
-        const response = await fetch('habitaciones.json');
-        const data = await response.json();
-        return data;
+        const habitacionesJSON = localStorage.getItem('habitaciones');
+        return habitacionesJSON ? JSON.parse(habitacionesJSON) : (console.log('No se encontraron habitaciones en el almacenamiento local.'), []);
+    } catch (error) {
+        console.error('Error al cargar las habitaciones desde el almacenamiento local', error);
+        return [];
+    }
+}
+
+// Función para cargar las habitaciones desde JSON, utilizando almacenamiento local como caché si está disponible
+async function cargarHabitaciones() {
+    try {
+        let habitaciones = await cargarHabitacionesDesdeLocalStorage();
+        habitaciones = habitaciones.length === 0 ? await obtenerHabitacionesDesdeJSON() : habitaciones;
+        return habitaciones;
     } catch (error) {
         console.error('Error al cargar las habitaciones', error);
         return [];
     }
 }
 
+async function obtenerHabitacionesDesdeJSON() {
+    try {
+        const response = await fetch('habitaciones.json');
+        const habitaciones = await response.json();
+        localStorage.setItem('habitaciones', JSON.stringify(habitaciones));
+        return habitaciones;
+    } catch (error) {
+        console.error('Error al cargar las habitaciones desde el archivo JSON', error);
+        return [];
+    }
+}
+
+
 // Función para crear las tarjetas de habitaciones
 function crearTarjetas(habitaciones) {
     const habitacionesContainer = document.getElementById("habitacionesContainer");
-    for (const habitacionInfo of habitaciones) {
+    habitaciones.forEach(habitacionInfo => {
         const habitacionCard = document.createElement("div");
         habitacionCard.classList.add("card");
 
@@ -29,13 +53,13 @@ function crearTarjetas(habitaciones) {
             </div>
         `;
 
-
         habitacionesContainer.appendChild(habitacionCard);
-    };
+    });
+
     // Event Listener para el botón "RESERVAR"
-    const botonesReservar = document.querySelectorAll(".reservar-btn");
-    botonesReservar.forEach((boton) => {
-        boton.addEventListener("click", () => {
+    habitacionesContainer.addEventListener("click", async (event) => {
+        if (event.target.classList.contains("reservar-btn")) {
+            const boton = event.target;
             // Obtener la categoría de la habitación seleccionada
             const seleccionCategoria = boton.parentElement.querySelector(".card-title").textContent;
 
@@ -98,7 +122,7 @@ function crearTarjetas(habitaciones) {
             // Agregar el formulario al contenedor principal
             document.body.appendChild(formularioSection);
 
-            /// Agregar evento de clic al botón "Confirmar Reserva"
+            // Agregar evento de clic al botón "Confirmar Reserva"
             document.getElementById("confirmarReserva").addEventListener("click", async (event) => {
                 event.preventDefault(); // Evitar que el formulario se envíe de forma predeterminada
 
@@ -108,7 +132,7 @@ function crearTarjetas(habitaciones) {
                 const pasajeros = document.getElementById("pasajeros").value;
 
                 // Lógica de cálculo de tarifas
-                let seleccionCategoria = document.querySelector(".card-title").textContent;
+                let seleccionCategoria = boton.parentElement.querySelector(".card-title").textContent;
                 let cantidadPax = parseInt(pasajeros);
                 let fechaCheckIn = new Date(ingreso);
                 let fechaCheckOut = new Date(egreso);
@@ -125,17 +149,16 @@ function crearTarjetas(habitaciones) {
                     console.error("No se pudieron obtener los detalles de la reserva.");
                 }
             });
-
-
-        });
+        }
     });
 }
+
 
 // Función para calcular el costo total de la estadia
 async function calcularCostoTotal(categoria, cantidadPax, fechaCheckIn, fechaCheckOut) {
     try {
-        // Cargar los datos de las habitaciones desde el archivo JSON
-        const habitaciones = await cargarHabitacionesDesdeJSON();
+        // Cargar los datos de las habitaciones desde el archivo JSON o desde el almacenamiento local
+        const habitaciones = await cargarHabitaciones();
 
         // Calcular la cantidad de noches
         const tiempoMilisegundosPorDia = 24 * 60 * 60 * 1000; // 1 día en milisegundos
@@ -144,39 +167,40 @@ async function calcularCostoTotal(categoria, cantidadPax, fechaCheckIn, fechaChe
         // Buscar la habitación en el array de precios
         const habitacion = habitaciones.find(h => h.categoria === categoria);
 
-        if (habitacion) {
-            // Calcular el costo total
-            const costoTotal = cantidadNoches * habitacion.precio;
-
-            // Calcular la seña (30% del total)
-            const costoSeña = 0.3 * costoTotal;
-
-            // Crear y retornar el objeto con los detalles de la reserva
-            return {
-                categoria,
-                cantidadPax,
-                fechaCheckIn: fechaCheckIn.toLocaleDateString(),
-                fechaCheckOut: fechaCheckOut.toLocaleDateString(),
-                cantidadDeNoches: cantidadNoches,
-                costoPorNoche: habitacion.precio,
-                costoTotal,
-                costoSeña
-            };
-        } else {
+        if (!habitacion) {
             console.error("La categoría de habitación no se encontró en la lista de precios.");
             return undefined;
         }
+
+        // Calcular el costo total
+        const costoTotal = cantidadNoches * habitacion.precio;
+
+        // Calcular la seña (30% del total)
+        const costoSeña = 0.3 * costoTotal;
+
+        // Crear y retornar el objeto con los detalles de la reserva
+        return {
+            categoria,
+            cantidadPax,
+            fechaCheckIn: fechaCheckIn.toLocaleDateString(),
+            fechaCheckOut: fechaCheckOut.toLocaleDateString(),
+            cantidadDeNoches: cantidadNoches,
+            costoPorNoche: habitacion.precio,
+            costoTotal,
+            costoSeña
+        };
     } catch (error) {
         console.error('Error al calcular el costo total de la estancia', error);
         return undefined;
     }
 }
 
+
 // Función para aplicar filtros
 async function aplicarFiltros() {
     try {
-        // Obtener los datos de las habitaciones desde el archivo JSON
-        const habitaciones = await cargarHabitacionesDesdeJSON();
+        // Obtener los datos de las habitaciones desde el archivo JSON o desde el almacenamiento local
+        const habitaciones = await cargarHabitaciones();
 
         const paxFiltro = document.getElementById("pax").value;
         const jacuzziFiltro = document.getElementById("jacuzzi").value;
@@ -184,11 +208,11 @@ async function aplicarFiltros() {
         const vistaFiltro = document.getElementById("vista").value;
 
         // Filtrar habitaciones según los criterios seleccionados
-        const habitacionesFiltradas = habitaciones.filter(habitacion => {
-            return (paxFiltro === "todos" || habitacion.pasajeros === parseInt(paxFiltro)) &&
-                (jacuzziFiltro === "todos" || habitacion.hidromasaje === jacuzziFiltro) &&
-                (vistaFiltro === "todos" || habitacion.vista === vistaFiltro);
-        });
+        const habitacionesFiltradas = habitaciones.filter(habitacion => (
+            (paxFiltro === "todos" || habitacion.pasajeros === parseInt(paxFiltro)) &&
+            (jacuzziFiltro === "todos" || habitacion.hidromasaje === jacuzziFiltro) &&
+            (vistaFiltro === "todos" || habitacion.vista === vistaFiltro)
+        ));
 
         // Ordenar habitaciones por precio si es necesario
         if (precioOrdenFiltro === "asc") {
@@ -207,6 +231,8 @@ async function aplicarFiltros() {
         console.error('Error al aplicar filtros', error);
     }
 }
+
+
 // Agregar event listeners a los campos de filtro para capturar los cambios
 document.getElementById("pax").addEventListener("change", aplicarFiltros);
 document.getElementById("jacuzzi").addEventListener("change", aplicarFiltros);
@@ -221,8 +247,6 @@ function mostrarDetallesReserva(detalleReserva) {
     const documento = document.getElementById("documento").value;
     const telefono = document.getElementById("telefono").value;
     const email = document.getElementById("email").value;
-
-    // Excluir campos del formulario que no deben mostrarse en el detalle
 
     // Crear el mensaje de la alerta con los detalles de la reserva
     const mensajeAlerta = `
@@ -251,7 +275,7 @@ function mostrarDetallesReserva(detalleReserva) {
 
 // Función para inicializar la aplicación
 async function iniciarApp() {
-    const habitaciones = await cargarHabitacionesDesdeJSON();
+    const habitaciones = await cargarHabitaciones();
     crearTarjetas(habitaciones);
 }
 

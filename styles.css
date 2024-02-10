@@ -814,9 +814,7 @@ footer img {
         font-size: 18px;
     }
 }
-/* Agrega este código al final del CSS existente */
 
-/* Estilos para la sección del formulario */
 section {
     margin-top: 20px;
     text-align: center;
@@ -831,37 +829,21 @@ section {
 
 label {
     margin-right: 10px;
-    color: #292929; /* Color de texto general */
+    color: #292929; 
 }
 
 select {
     padding: 5px;
     margin-bottom: 10px;
-    background-color: #ffffff; /* Color de fondo para selects */
-    color: #292929; /* Color de texto para selects */
-    border: 1px solid #cccccc; /* Borde de selects */
+    background-color: #ffffff;
+    border: 1px solid #cccccc; 
     border-radius: 5px;
 }
 
-button {
-    padding: 10px;
-    background-color: #266dd6;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-}
-
-button:hover {
-    background-color: #0045c4;
-}
-
-/* Estilos específicos para los selects */
 #pax, #jacuzzi, #precioOrden, #vista {
     width: 150px;
 }
 
-/* Estilos responsivos para adaptar el formulario a tamaños más pequeños */
 @media (max-width: 600px) {
     #filtroForm {
         flex-direction: column;
